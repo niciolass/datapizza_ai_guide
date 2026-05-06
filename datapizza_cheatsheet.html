@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Datapizza AI — Cheat Sheet</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap');
+
+  :root {
+    --bg: #0d0d0f;
+    --surface: #141417;
+    --surface2: #1c1c21;
+    --border: #2a2a32;
+    --accent: #ff5e3a;
+    --accent2: #ffb347;
+    --accent3: #4ecdc4;
+    --accent4: #a78bfa;
+    --text: #e8e8f0;
+    --text-dim: #8888a0;
+    --code-bg: #0a0a0c;
+    --s1: #ff5e3a;
+    --s2: #a78bfa;
+    --s3: #4ecdc4;
+    --s4: #f59e0b;
+    --s5: #34d399;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  /* ── HEADER ── */
+  header {
+    padding: 48px 40px 36px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: flex-end;
+    gap: 32px;
+    background: linear-gradient(135deg, #0d0d0f 60%, #16101a);
+  }
+
+  .logo-area { flex: 1; }
+
+  .logo-area h1 {
+    font-size: 42px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1;
+  }
+
+  .logo-area h1 span { color: var(--accent); }
+
+  .logo-area p {
+    color: var(--text-dim);
+    font-size: 13px;
+    margin-top: 8px;
+    letter-spacing: 0.5px;
+  }
+
+  .pill {
+    display: inline-block;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 3px 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--accent3);
+    margin-right: 8px;
+    margin-top: 10px;
+  }
+
+  .install-box {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 18px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--accent3);
+    min-width: 340px;
+  }
+
+  .install-box .comment { color: var(--text-dim); }
+
+  /* ── LAYOUT ── */
+  .container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 32px 40px 60px;
+  }
+
+  /* ── STAGE SECTIONS ── */
+  .stage {
+    margin-bottom: 48px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .stage-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .stage-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    opacity: 0.6;
+  }
+
+  .stage-title {
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+  }
+
+  .stage-file {
+    margin-left: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 3px 10px;
+  }
+
+  .stage[data-n="1"] .stage-header { background: linear-gradient(90deg, rgba(255,94,58,0.08), transparent); }
+  .stage[data-n="1"] .stage-title { color: var(--s1); }
+  .stage[data-n="1"] { border-color: rgba(255,94,58,0.25); }
+
+  .stage[data-n="2"] .stage-header { background: linear-gradient(90deg, rgba(167,139,250,0.08), transparent); }
+  .stage[data-n="2"] .stage-title { color: var(--s2); }
+  .stage[data-n="2"] { border-color: rgba(167,139,250,0.25); }
+
+  .stage[data-n="3"] .stage-header { background: linear-gradient(90deg, rgba(78,205,196,0.08), transparent); }
+  .stage[data-n="3"] .stage-title { color: var(--s3); }
+  .stage[data-n="3"] { border-color: rgba(78,205,196,0.25); }
+
+  .stage[data-n="4"] .stage-header { background: linear-gradient(90deg, rgba(245,158,11,0.08), transparent); }
+  .stage[data-n="4"] .stage-title { color: var(--s4); }
+  .stage[data-n="4"] { border-color: rgba(245,158,11,0.25); }
+
+  .stage[data-n="5"] .stage-header { background: linear-gradient(90deg, rgba(52,211,153,0.08), transparent); }
+  .stage[data-n="5"] .stage-title { color: var(--s5); }
+  .stage[data-n="5"] { border-color: rgba(52,211,153,0.25); }
+
+  .stage-body {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 0;
+  }
+
+  /* ── CARDS ── */
+  .card {
+    padding: 20px 24px;
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .card:last-child { border-right: none; }
+
+  .card-title {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 12px;
+  }
+
+  /* ── CODE BLOCKS ── */
+  pre {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 12px 14px;
+    overflow-x: auto;
+    margin: 8px 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11.5px;
+    line-height: 1.7;
+  }
+
+  .kw { color: #ff79c6; }
+  .fn { color: #50fa7b; }
+  .st { color: #f1fa8c; }
+  .cm { color: #6272a4; }
+  .cn { color: #ffb86c; }
+  .at { color: #8be9fd; }
+  .op { color: var(--text-dim); }
+  .val { color: #bd93f9; }
+
+  /* ── CONCEPT ROWS ── */
+  .concept-row {
+    display: flex;
+    gap: 10px;
+    margin: 6px 0;
+    align-items: flex-start;
+  }
+
+  .concept-key {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--accent3);
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 2px 7px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .concept-val {
+    font-size: 12px;
+    color: var(--text-dim);
+    line-height: 1.5;
+    padding-top: 1px;
+  }
+
+  /* ── TABLE ── */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+    margin-top: 8px;
+  }
+
+  th {
+    text-align: left;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+    padding: 6px 8px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  td {
+    padding: 7px 8px;
+    border-bottom: 1px solid rgba(42,42,50,0.5);
+    vertical-align: top;
+  }
+
+  td:first-child {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--accent3);
+    white-space: nowrap;
+  }
+
+  td:last-child { color: var(--text-dim); }
+
+  /* ── CHECKPOINT ── */
+  .checkpoint {
+    background: var(--surface2);
+    border-top: 1px solid var(--border);
+    padding: 14px 24px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .checkpoint-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-right: 4px;
+  }
+
+  .checkpoint-q {
+    font-size: 12px;
+    color: var(--text-dim);
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 4px 10px;
+  }
+
+  /* ── MENTAL MODEL BOX ── */
+  .model-box {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 12px 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    line-height: 2;
+    color: var(--text-dim);
+    margin: 8px 0;
+  }
+
+  .model-box .arrow { color: var(--accent); }
+  .model-box .node { color: var(--text); }
+  .model-box .phase { color: var(--accent4); font-weight: 700; }
+
+  /* ── CONCEPTS GRID ── */
+  .concepts-section {
+    margin-top: 48px;
+    margin-bottom: 48px;
+  }
+
+  .concepts-section h2 {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .concepts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+  }
+
+  .concept-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 20px;
+  }
+
+  .concept-card h3 {
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: var(--accent2);
+  }
+
+  .concept-card p {
+    font-size: 12px;
+    color: var(--text-dim);
+    line-height: 1.6;
+  }
+
+  /* ── TAG ── */
+  .tag {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 3px;
+    margin-right: 4px;
+    margin-bottom: 4px;
+  }
+
+  .tag-async { background: rgba(78,205,196,0.12); color: var(--accent3); border: 1px solid rgba(78,205,196,0.25); }
+  .tag-sync  { background: rgba(255,94,58,0.12);  color: var(--s1);      border: 1px solid rgba(255,94,58,0.25); }
+  .tag-stream{ background: rgba(167,139,250,0.12); color: var(--s2);      border: 1px solid rgba(167,139,250,0.25); }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 24px;
+    color: var(--text-dim);
+    font-size: 12px;
+    border-top: 1px solid var(--border);
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  footer a { color: var(--accent3); text-decoration: none; }
+
+  @media print {
+    body { background: white; color: #111; }
+    .stage { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-area">
+    <h1>Datapizza <span>AI</span></h1>
+    <p>Framework cheat sheet — Clients · Tools · Agents · Multi-agent · RAG · Observability</p>
+    <div>
+      <span class="pill">v0.0.2</span>
+      <span class="pill">Python ≥3.10</span>
+      <span class="pill">Ollama compatible</span>
+    </div>
+  </div>
+  <div class="install-box">
+    <span class="comment"># Core install</span><br>
+    pip install datapizza-ai<br>
+    pip install datapizza-ai-clients-openai-like<br><br>
+    <span class="comment"># Optional extras</span><br>
+    pip install duckduckgo-search<br>
+    pip install qdrant-client fastembed
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- ══════════════════════════════════════════ -->
+  <!-- STAGE 1                                    -->
+  <!-- ══════════════════════════════════════════ -->
+  <div class="stage" data-n="1">
+    <div class="stage-header">
+      <span class="stage-num">STAGE 01</span>
+      <span class="stage-title">LLM Client basics</span>
+      <span class="stage-file">stage1_client_basics.py</span>
+    </div>
+    <div class="stage-body">
+
+      <div class="card">
+        <div class="card-title">Client setup</div>
+        <pre><span class="kw">from</span> datapizza.clients.openai_like <span class="kw">import</span> <span class="cn">OpenAILikeClient</span>
+
+client = <span class="cn">OpenAILikeClient</span>(
+  base_url=<span class="st">"http://OLLAMA_URL/v1"</span>,
+  model=<span class="st">"qwen3"</span>,
+  api_key=<span class="st">"ollama"</span>,        <span class="cm"># required, ignored</span>
+  system_prompt=<span class="st">"..."</span>,   <span class="cm"># default system</span>
+  temperature=<span class="val">0.7</span>,
+)</pre>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Invoke &amp; response fields</div>
+        <pre><span class="cm"># All params can be overridden per call</span>
+response = client.<span class="fn">invoke</span>(
+  <span class="st">"Your question"</span>,
+  temperature=<span class="val">1.2</span>,
+  max_tokens=<span class="val">200</span>,
+  system_prompt=<span class="st">"Override"</span>,
+)
+
+response.text                  <span class="cm"># main output</span>
+response.content               <span class="cm"># list of typed blocks</span>
+response.prompt_tokens_used
+response.completion_tokens_used
+response.cached_tokens_used</pre>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Memory (manual multi-turn)</div>
+        <pre><span class="kw">from</span> datapizza.memory <span class="kw">import</span> <span class="cn">Memory</span>
+<span class="kw">from</span> datapizza.type <span class="kw">import</span> <span class="cn">ROLE</span>, <span class="cn">TextBlock</span>
+
+memory = <span class="cn">Memory</span>()
+
+response = client.<span class="fn">invoke</span>(<span class="st">"msg"</span>, memory=memory)
+memory.<span class="fn">add_turn</span>(<span class="cn">TextBlock</span>(content=<span class="st">"msg"</span>),
+               role=<span class="cn">ROLE</span>.USER)
+memory.<span class="fn">add_turn</span>(response.content,
+               role=<span class="cn">ROLE</span>.ASSISTANT)
+
+<span class="cm"># Inspect</span>
+<span class="kw">for</span> turn <span class="kw">in</span> memory.turns:
+    print(turn.role, turn.content)</pre>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Async &amp; streaming methods</div>
+        <table>
+          <tr><th>Method</th><th>Async?</th><th>Streams?</th><th>Use when</th></tr>
+          <tr><td>.invoke()</td><td>❌</td><td>❌</td><td>Scripts / notebooks</td></tr>
+          <tr><td>.a_invoke()</td><td>✅</td><td>❌</td><td>FastAPI, full response</td></tr>
+          <tr><td>.stream_invoke()</td><td>❌</td><td>✅</td><td>CLI streaming</td></tr>
+          <tr><td>.a_stream_invoke()</td><td>✅</td><td>✅</td><td>FastAPI + live output</td></tr>
+        </table>
+        <pre style="margin-top:10px"><span class="cm"># Streaming</span>
+<span class="kw">for</span> chunk <span class="kw">in</span> client.<span class="fn">stream_invoke</span>(<span class="st">"..."</span>):
+    print(chunk, end=<span class="st">""</span>, flush=<span class="val">True</span>)
+
+<span class="cm"># Async</span>
+response = <span class="kw">await</span> client.<span class="fn">a_invoke</span>(<span class="st">"..."</span>)</pre>
+      </div>
+
+    </div>
+    <div class="checkpoint">
+      <span class="checkpoint-label">✓ Checkpoint</span>
+      <span class="checkpoint-q">response.text vs response.content?</span>
+      <span class="checkpoint-q">Override temp per call?</span>
+      <span class="checkpoint-q">Why manual memory.add_turn()?</span>
+      <span class="checkpoint-q">a_invoke vs stream_invoke?</span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════ -->
+  <!-- STAGE 2                                    -->
+  <!-- ══════════════════════════════════════════ -->
+  <div class="stage" data-n="2">
+    <div class="stage-header">
+      <span class="stage-num">STAGE 02</span>
+      <span class="stage-title">Tools &amp; @tool decorator</span>
+      <span class="stage-file">stage2_tools.py</span>
+    </div>
+    <div class="stage-body">
+
+      <div class="card">
+        <div class="card-title">Creating a tool</div>
+        <pre><span class="kw">from</span> datapizza.tools <span class="kw">import</span> <span class="cn">tool</span>
+
+<span class="at">@tool</span>
+<span class="kw">def</span> <span class="fn">get_time</span>(timezone: <span class="cn">str</span>) -> <span class="cn">str</span>:
+    <span class="st">"""Returns current time in timezone."""</span>
+    <span class="kw">from</span> datetime <span class="kw">import</span> datetime
+    <span class="kw">import</span> zoneinfo
+    tz = zoneinfo.<span class="cn">ZoneInfo</span>(timezone)
+    <span class="kw">return</span> datetime.<span class="fn">now</span>(tz).<span class="fn">strftime</span>(<span class="st">"%H:%M %Z"</span>)
+
+<span class="cm"># @tool reads: name, docstring, type annotations</span>
+<span class="cm"># → auto-generates JSON schema for the LLM</span>
+get_time.name    <span class="cm"># "get_time"</span>
+get_time.schema  <span class="cm"># generated JSON schema</span></pre>
+      </div>
+
+      <div class="card">
+        <div class="card-title">tool_choice options</div>
+        <table>
+          <tr><th>Value</th><th>Behaviour</th></tr>
+          <tr><td>"auto"</td><td>Model decides whether to call a tool</td></tr>
+          <tr><td>"required"</td><td>Must call at least one tool</td></tr>
+          <tr><td>"required_first"</td><td>Calls a tool first, then reasons</td></tr>
+          <tr><td>"none"</td><td>No tools, answer from knowledge only</td></tr>
+          <tr><td>["tool_name"]</td><td>Forces that specific tool</td></tr>
+        </table>
+        <pre style="margin-top:10px">response = client.<span class="fn">invoke</span>(
+  <span class="st">"question"</span>,
+  tools=[get_time, calculator],
+  tool_choice=<span class="st">"auto"</span>,
+)</pre>
+      </div>
+
+      <div class="card">
+        <div class="card-title">How tools work underground</div>
+        <div class="model-box">
+<span class="phase">1.</span> <span class="node">LLM receives tools as JSON schema in request</span>
+<span class="arrow">→</span> <span class="node">Returns ToolUseBlock (name + args), not output</span>
+<span class="phase">2.</span> <span class="node">Framework finds Python fn by name, calls it</span>
+<span class="arrow">→</span> <span class="node">Appends result as "tool" role message</span>
+<span class="phase">3.</span> <span class="node">Full history re-sent to LLM</span>
+<span class="arrow">→</span> <span class="node">LLM writes final answer using result</span>
+        </div>
+        <pre><span class="cm"># Inspect what happened</span>
+<span class="kw">from</span> datapizza.type <span class="kw">import</span> <span class="cn">ToolUseBlock</span>
+calls = [b <span class="kw">for</span> b <span class="kw">in</span> r.content
+         <span class="kw">if</span> <span class="fn">isinstance</span>(b, <span class="cn">ToolUseBlock</span>)]
+<span class="kw">for</span> tc <span class="kw">in</span> calls:
+    print(tc.name, tc.input)</pre>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Built-in: DuckDuckGoSearchTool</div>
+        <pre><span class="kw">from</span> datapizza.tools.duckduckgo <span class="kw">import</span> \
+    <span class="cn">DuckDuckGoSearchTool</span>
+
+search = <span class="cn">DuckDuckGoSearchTool</span>()
+<span class="cm"># pip install duckduckgo-search</span>
+
+response = client.<span class="fn">invoke</span>(
+  <span class="st">"Latest Python version?"</span>,
+  tools=[search],
+  tool_choice=<span class="st">"auto"</span>,
+)</pre>
+        <p style="font-size:12px; color:var(--text-dim); margin-top:8px">
+          Works identically to custom @tool functions — combine freely.
+        </p>
+      </div>
+
+    </div>
+    <div class="checkpoint">
+      <span class="checkpoint-label">✓ Checkpoint</span>
+      <span class="checkpoint-q">What does @tool read from the function?</span>
+      <span class="checkpoint-q">required vs required_first?</span>
+      <span class="checkpoint-q">When to use tool_choice="none"?</span>
+      <span class="checkpoint-q">How to inspect which tool was called?</span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════ -->
+  <!-- STAGE 3                                    -->
+  <!-- ══════════════════════════════════════════ -->
+  <div class="stage" data-n="3">
+    <div class="stage-header">
+      <span class="stage-num">STAGE 03</span>
+      <span class="stage-title">Agents &amp; Memory</span>
+      <span class="stage-file">stage3_agents.py · stage3b_session_persistence.py</span>
+    </div>
+    <div class="stage-body">
+
+      <div class="card">
+        <div class="card-title">Agent setup</div>
+        <pre><span class="kw">from</span> datapizza.agents <span class="kw">import</span> <span class="cn">Agent</span>
+
+agent = <span class="cn">Agent</span>(
+  name=<span class="st">"assistant"</span>,
+  client=client,
+  system_prompt=<span class="st">"..."</span>,
+  tools=[get_time, calculator],
+  memory=memory,         <span class="cm"># inject restored memory</span>
+  planning_interval=<span class="val">1</span>,  <span class="cm"># 0 = no planning</span>
+  max_steps=<span class="val">6</span>,          <span class="cm"># safety cap</span>
+)
+
+<span class="cm"># Run methods</span>
+response = agent.<span class="fn">run</span>(<span class="st">"question"</span>)
+response = <span class="kw">await</span> agent.<span class="fn">a_run</span>(<span class="st">"question"</span>)
+<span class="kw">for</span> chunk <span class="kw">in</span> agent.<span class="fn">stream_invoke</span>(<span class="st">"..."</span>): ...
+<span class="kw">async for</span> c <span class="kw">in</span> agent.<span class="fn">a_stream_invoke</span>(<span class="st">"..."</span>): ...</pre>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Agent vs client.invoke()</div>
+        <div style="font-size:12px; color:var(--text-dim); margin-bottom:10px">Agent handles automatically:</div>
+        <div class="concept-row">
+          <span class="concept-key">memory</span>
+          <span class="concept-val">No manual add_turn() needed — agent updates memory after each step</span>
+        </div>
+        <div class="concept-row">
+          <span class="concept-key">tool loop</span>
+          <span class="concept-val">Runs tool → appends result → re-invokes LLM until done</span>
+        </div>
+        <div class="concept-row">
+          <span class="concept-key">planning</span>
+          <span class="concept-val">When planning_interval > 0, writes a plan before acting</span>
+        </div>
+        <div class="concept-row">
+          <span class="concept-key">reset</span>
+          <span class="concept-val">agent.memory.reset() — clears without re-instantiating</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Session persistence pattern</div>
+        <pre><span class="cm"># Serialize</span>
+<span class="kw">def</span> <span class="fn">memory_to_dict</span>(memory) -> <span class="cn">list</span>[<span class="cn">dict</span>]:
+    <span class="kw">return</span> [
+      {<span class="st">"role"</span>: t.role.value,
+       <span class="st">"text"</span>: t.content.text}
+      <span class="kw">for</span> t <span class="kw">in</span> memory.turns
+    ]
+
+<span class="cm"># Restore</span>
+<span class="kw">def</span> <span class="fn">dict_to_memory</span>(turns) -> <span class="cn">Memory</span>:
+    memory = <span class="cn">Memory</span>()
+    <span class="kw">for</span> t <span class="kw">in</span> turns:
+        memory.<span class="fn">add_turn</span>(
+          <span class="cn">TextBlock</span>(content=t[<span class="st">"text"</span>]),
+          role=<span class="cn">ROLE</span>(t[<span class="st">"role"</span>]))
+    <span class="kw">return</span> memory
+
+<span class="cm"># Inject at construction</span>
+agent = <span class="cn">Agent</span>(..., memory=<span class="fn">dict_to_memory</span>(db_turns))</pre>
+      </div>
+
+      <div class="card">
+        <div class="card-title">FastAPI session pattern</div>
+        <pre><span class="cm"># In-memory LRU cache (single server)</span>
+_cache: <span class="cn">dict</span>[<span class="cn">str</span>, <span class="cn">Agent</span>] = {}
+
+<span class="kw">def</span> <span class="fn">get_agent</span>(session_id):
+    <span class="kw">if</span> session_id <span class="kw">not in</span> _cache:
+        stored = <span class="fn">load_from_db</span>(session_id)
+        _cache[session_id] = <span class="cn">Agent</span>(
+          ...,
+          memory=<span class="fn">dict_to_memory</span>(stored)
+        )
+    <span class="kw">return</span> _cache[session_id]
+
+<span class="at">@app.post</span>(<span class="st">"/chat"</span>)
+<span class="kw">async def</span> <span class="fn">chat</span>(session_id, message):
+    agent = <span class="fn">get_agent</span>(session_id)
+    r = <span class="kw">await</span> agent.<span class="fn">a_run</span>(message)
+    <span class="fn">save_to_db</span>(session_id, agent.memory)
+    <span class="kw">return</span> {<span class="st">"reply"</span>: r.text}</pre>
+      </div>
+
+    </div>
+    <div class="checkpoint">
+      <span class="checkpoint-label">✓ Checkpoint</span>
+      <span class="checkpoint-q">What does Agent handle vs client.invoke()?</span>
+      <span class="checkpoint-q">How to start a fresh session?</span>
+      <span class="checkpoint-q">stream_invoke vs a_run in FastAPI?</span>
+      <span class="checkpoint-q">What does planning_interval=1 add to memory?</span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════ -->
+  <!-- STAGE 4                                    -->
+  <!-- ══════════════════════════════════════════ -->
+  <div class="stage" data-n="4">
+    <div class="stage-header">
+      <span class="stage-num">STAGE 04</span>
+      <span class="stage-title">Multi-agent systems</span>
+      <span class="stage-file">stage4_multiagent.py</span>
+    </div>
+    <div class="stage-body">
+
+      <div class="card">
+        <div class="card-title">Wiring agents together</div>
+        <pre>researcher = <span class="cn">Agent</span>(name=<span class="st">"researcher"</span>, ...)
+writer     = <span class="cn">Agent</span>(name=<span class="st">"writer"</span>, ...)
+
+manager = <span class="cn">Agent</span>(
+  name=<span class="st">"manager"</span>,
+  client=client,
+  planning_interval=<span class="val">1</span>,  <span class="cm"># critical for multi-agent</span>
+  max_steps=<span class="val">6</span>,
+)
+
+<span class="cm"># Registers specialists as callable tools</span>
+manager.<span class="fn">can_call</span>([researcher, writer])
+
+<span class="cm"># Inspect what manager can call</span>
+[t.name <span class="kw">for</span> t <span class="kw">in</span> manager.tools]
+<span class="cm"># → ["researcher", "writer"]</span>
+
+response = manager.<span class="fn">run</span>(<span class="st">"research and write about X"</span>)</pre>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Key concepts</div>
+        <div class="concept-row">
+          <span class="concept-key">can_call()</span>
+          <span class="concept-val">Registers sub-agent as a @tool on the manager — works exactly like a regular tool under the hood</span>
+        </div>
+        <div class="concept-row">
+          <span class="concept-key">isolation</span>
+          <span class="concept-val">Each agent has its own isolated Memory. Specialist memory resets per invocation — only manager is stateful</span>
+        </div>
+        <div class="concept-row">
+          <span class="concept-key">planning</span>
+          <span class="concept-val">planning_interval=1 makes manager write a plan before delegating — dramatically improves reliability</span>
+        </div>
+        <div class="concept-row">
+          <span class="concept-key">pattern</span>
+          <span class="concept-val">Manager = orchestrator/stateful. Specialists = stateless workers focused on one task</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Tracing with ContextTracing</div>
+        <pre><span class="kw">from</span> datapizza.monitoring <span class="kw">import</span> <span class="cn">ContextTracing</span>
+
+<span class="kw">with</span> <span class="cn">ContextTracing</span>().<span class="fn">trace</span>() <span class="kw">as</span> tracer:
+    response = manager.<span class="fn">run</span>(<span class="st">"task"</span>)
+
+summary = tracer.<span class="fn">get_summary</span>()
+summary.total_spans
+summary.total_duration_ms
+summary.total_prompt_tokens
+summary.total_completion_tokens
+
+<span class="cm"># Per-agent breakdown</span>
+<span class="kw">for</span> span <span class="kw">in</span> tracer.spans:
+    print(span.name, span.prompt_tokens)</pre>
+      </div>
+
+    </div>
+    <div class="checkpoint">
+      <span class="checkpoint-label">✓ Checkpoint</span>
+      <span class="checkpoint-q">What does can_call() register the sub-agent as?</span>
+      <span class="checkpoint-q">Why does specialist memory reset per call?</span>
+      <span class="checkpoint-q">Why is planning_interval=1 key for multi-agent?</span>
+      <span class="checkpoint-q">What does one trace span correspond to?</span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════ -->
+  <!-- STAGE 5                                    -->
+  <!-- ══════════════════════════════════════════ -->
+  <div class="stage" data-n="5">
+    <div class="stage-header">
+      <span class="stage-num">STAGE 05</span>
+      <span class="stage-title">RAG pipelines &amp; observability</span>
+      <span class="stage-file">stage5_rag.py</span>
+    </div>
+    <div class="stage-body">
+
+      <div class="card">
+        <div class="card-title">Mental model: two phases</div>
+        <div class="model-box">
+<span class="phase">INGESTION</span> <span class="cm">(runs once)</span>
+<span class="node">text</span> <span class="arrow">→</span> <span class="node">TextParser</span> <span class="arrow">→</span> <span class="node">RecursiveSplitter</span>
+     <span class="arrow">→</span> <span class="node">ChunkEmbedder</span> <span class="arrow">→</span> <span class="node">QdrantVectorstore</span>
+
+<span class="phase">RETRIEVAL</span> <span class="cm">(runs per question)</span>
+<span class="node">query</span> <span class="arrow">→</span> <span class="node">embed</span> <span class="arrow">→</span> <span class="node">vectorstore.search</span>
+      <span class="arrow">→</span> <span class="node">context chunks</span> <span class="arrow">→</span> <span class="node">LLM generate</span>
+        </div>
+        <pre><span class="cm"># In-memory Qdrant (no server needed)</span>
+vectorstore = <span class="cn">QdrantVectorstore</span>(config=<span class="cn">VectorConfig</span>(
+    collection_name=<span class="st">"docs"</span>,
+    size=<span class="val">384</span>,        <span class="cm"># FastEmbedder dim</span>
+    in_memory=<span class="val">True</span>,
+))</pre>
+      </div>
+
+      <div class="card">
+        <div class="card-title">IngestionPipeline</div>
+        <pre><span class="kw">from</span> datapizza.pipeline <span class="kw">import</span> <span class="cn">IngestionPipeline</span>
+<span class="kw">from</span> datapizza.modules.parsers.text <span class="kw">import</span> <span class="cn">TextParser</span>
+<span class="kw">from</span> datapizza.modules.splitters <span class="kw">import</span> <span class="cn">RecursiveSplitter</span>
+<span class="kw">from</span> datapizza.embedders <span class="kw">import</span> <span class="cn">ChunkEmbedder</span>
+<span class="kw">from</span> datapizza.embedders.fast <span class="kw">import</span> <span class="cn">FastEmbedder</span>
+
+pipeline = <span class="cn">IngestionPipeline</span>(
+    parser=<span class="cn">TextParser</span>(),
+    splitter=<span class="cn">RecursiveSplitter</span>(
+        chunk_size=<span class="val">300</span>, chunk_overlap=<span class="val">30</span>),
+    embedder=<span class="cn">ChunkEmbedder</span>(embedder=<span class="cn">FastEmbedder</span>()),
+    vectorstore=vectorstore,
+)
+
+pipeline.<span class="fn">run</span>(text=<span class="st">"..."</span>, metadata={<span class="st">"source"</span>: <span class="st">"x"</span>})</pre>
+      </div>
+
+      <div class="card">
+        <div class="card-title">DagPipeline (retrieval)</div>
+        <pre><span class="kw">from</span> datapizza.pipeline <span class="kw">import</span> <span class="cn">DagPipeline</span>
+<span class="kw">from</span> datapizza.pipeline.dag <span class="kw">import</span> <span class="cn">Connection</span>
+
+dag = <span class="cn">DagPipeline</span>(
+  modules={
+    <span class="st">"retriever"</span>: <span class="cn">RetrieverNode</span>(...),
+    <span class="st">"generator"</span>: <span class="cn">GeneratorNode</span>(...),
+  },
+  connections=[
+    <span class="cm"># query flows from retriever to generator</span>
+    <span class="cn">Connection</span>(from_node_name=<span class="st">"retriever"</span>,
+               to_node_name=<span class="st">"generator"</span>,
+               source_key=<span class="st">"query"</span>,
+               target_key=<span class="st">"query"</span>),
+    <span class="cn">Connection</span>(from_node_name=<span class="st">"retriever"</span>,
+               to_node_name=<span class="st">"generator"</span>,
+               source_key=<span class="st">"context"</span>,
+               target_key=<span class="st">"context"</span>),
+  ],
+  entry_node=<span class="st">"retriever"</span>,
+  output_node=<span class="st">"generator"</span>,
+)
+answer = dag.<span class="fn">run</span>(query=<span class="st">"question"</span>)</pre>
+      </div>
+
+      <div class="card">
+        <div class="card-title">RAG as agent tool + RAG vs large context</div>
+        <pre><span class="cm"># Best production pattern</span>
+<span class="at">@tool</span>
+<span class="kw">def</span> <span class="fn">search_docs</span>(query: <span class="cn">str</span>) -> <span class="cn">str</span>:
+    <span class="st">"""Searches documentation. Use for framework Qs."""</span>
+    <span class="kw">return</span> dag.<span class="fn">run</span>(query=query)
+
+agent = <span class="cn">Agent</span>(..., tools=[search_docs])</pre>
+        <div style="margin-top:12px">
+        <table>
+          <tr><th></th><th>RAG</th><th>Large context</th></tr>
+          <tr><td>Doc size</td><td>Any</td><td>Must fit window</td></tr>
+          <tr><td>Accuracy</td><td>May miss chunks</td><td>Sees everything</td></tr>
+          <tr><td>Complexity</td><td>High</td><td>Near zero</td></tr>
+          <tr><td>Cost</td><td>Low/call</td><td>Higher/call</td></tr>
+        </table>
+        </div>
+        <p style="font-size:11px; color:var(--text-dim); margin-top:8px">
+          👉 For most business docs (&lt;50k tokens): full context wins. Add RAG only when docs genuinely exceed the window.
+        </p>
+      </div>
+
+    </div>
+    <div class="checkpoint">
+      <span class="checkpoint-label">✓ Checkpoint</span>
+      <span class="checkpoint-q">IngestionPipeline vs DagPipeline — when does each run?</span>
+      <span class="checkpoint-q">Why wrap RAG as a @tool?</span>
+      <span class="checkpoint-q">What does a Connection define?</span>
+      <span class="checkpoint-q">When to prefer large context over RAG?</span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════ -->
+  <!-- CONCEPTS REFERENCE                         -->
+  <!-- ══════════════════════════════════════════ -->
+  <div class="concepts-section">
+    <h2>Quick reference — Key concepts</h2>
+    <div class="concepts-grid">
+
+      <div class="concept-card">
+        <h3>response.content blocks</h3>
+        <p>Every response contains typed blocks: <code>TextBlock</code> (final text), <code>ToolUseBlock</code> (LLM requested a tool call with name + args), <code>ToolResultBlock</code> (the function's return value). Filter by type to inspect what happened.</p>
+      </div>
+
+      <div class="concept-card">
+        <h3>Tool execution loop</h3>
+        <p>The LLM never executes code — it returns a structured ToolUseBlock. The framework finds your Python function by name, calls it, appends the result as a "tool" role message, and re-sends everything to the LLM. This loop repeats until the LLM returns a TextBlock with no tool calls.</p>
+      </div>
+
+      <div class="concept-card">
+        <h3>Agent memory isolation</h3>
+        <p>In a multi-agent system, each agent owns its own Memory. Sub-agents are stateless workers — their memory resets per invocation from the manager. Only the manager maintains a growing stateful conversation history.</p>
+      </div>
+
+      <div class="concept-card">
+        <h3>planning_interval</h3>
+        <p>When set > 0, the agent writes an explicit plan (a TextBlock listing intended steps) before taking any action. This commits the model to a strategy rather than improvising, dramatically improving reliability on multi-step and multi-agent tasks.</p>
+      </div>
+
+      <div class="concept-card">
+        <h3>DagPipeline Connection</h3>
+        <p><code>source_key</code>: which key in the source node's return dict to extract. <code>target_key</code>: which parameter name of the destination node's _run() to pass it to. Two connections from the same source node = two separate values being passed downstream.</p>
+      </div>
+
+      <div class="concept-card">
+        <h3>Tracing spans</h3>
+        <p>One span = one LLM call. In a multi-agent trace, you'll see one span per agent invocation. Per-span token counts reveal cost distribution: the manager is typically cheap (few tokens), specialists are where tokens accumulate.</p>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  datapizza-ai cheat sheet &nbsp;·&nbsp;
+  <a href="https://docs.datapizza.ai/0.0.2/">docs.datapizza.ai</a> &nbsp;·&nbsp;
+  <a href="https://github.com/datapizza-labs/datapizza-ai">github</a>
+</footer>
+
+</body>
+</html>
