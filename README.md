@@ -1,5 +1,8 @@
 # Datapizza AI — Learning Guide
 
+##Cheat Sheet
+https://niciolass.github.io/datapizza_ai_guide/
+
 ## Files in this package
 
 | File | What it covers |
